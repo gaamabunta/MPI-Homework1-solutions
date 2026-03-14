@@ -18,15 +18,10 @@ int main(int argc, char *argv[]) {
     sendbuf = (int*)malloc(size * sizeof(int));
     recvbuf = (int*)malloc(size * sizeof(int));
 
-    /* Prepare send buffer: for destination j, send rank*size + j */
     for (int j = 0; j < size; j++) {
         sendbuf[j] = rank * size + j;
     }
-
-    /* All‑to‑all exchange */
     MPI_Alltoall(sendbuf, 1, MPI_INT, recvbuf, 1, MPI_INT, MPI_COMM_WORLD);
-
-    /* Print what we received */
     printf("Process %d received: [", rank);
     for (int i = 0; i < size; i++) {
         printf("%d%s", recvbuf[i], (i == size-1) ? "]\n" : ", ");
